@@ -13,19 +13,40 @@
         </div>
     </div>
     <div class="q-pa-md q-gutter-sm">
-        <q-btn color="primary" label="analyze" />
+        <q-btn @click="onClick" color="primary" label="analyze" />
     </div>
 </q-page>
 </template>
 
 <script>
 import {
-    defineComponent
-} from "vue";
+    api
+} from 'boot/axios';
 
-export default defineComponent({
-    name: "PageIndex",
-});
+export default {
+    data() {
+        return {}
+    },
+    methods() {
+        return {}
+    },
+    setup() {
+        return {
+            onClick() {
+                api.get('/analyze').then(response => {
+                    if (response.status == 200) {
+                        console.log('all good');
+                    } else {
+                        console.log('something went wrong');
+                    }
+                })
+
+            }
+        }
+
+    }
+
+};
 </script>
 
 <style scoped>
