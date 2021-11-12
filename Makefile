@@ -1,8 +1,8 @@
+dependencies:
+	npm install -g @quasar/cli && npm install
+
 dev-client:
 	quasar dev
 
 dev-server:
-	node api/server.js
-
-dependencies:
-	npm install -g @quasar/cli && npm install
+	GOOGLE_APPLICATION_CREDENTIALS=bootloader/gcp.json node api/server.js

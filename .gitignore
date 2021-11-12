@@ -2,6 +2,7 @@
 .thumbs.db
 node_modules
 api/files
+bootloader/gcp.json
 
 # Quasar core related directories
 .quasar
