@@ -16,7 +16,6 @@
     "express": "^4.17.1",
     "ffmpeg": "^0.0.4",
     "formidable": "^2.0.1",
-    "linear16": "^1.2.0",
     "quasar": "^2.0.0"
   },
   "devDependencies": {
