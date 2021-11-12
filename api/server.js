@@ -1,12 +1,14 @@
 // env settings
 const
+    async = require('async'),
     express = require('express'),
     app = express(),
     formidable = require('formidable'),
     path = require('path'),
     fs = require('fs'),
-    speech = require('@google-cloud/speech')
-linear16 = require('linear16')
+    speech = require('@google-cloud/speech'),
+    audio = require('./audio'),
+    helpers = require('./helpers')
 
 // server settings
 const
@@ -39,8 +41,9 @@ app.use((req, res, next) => {
 })
 
 app.post('/upload', (req, res) => {
+    helpers.removeContents(folder)
     const form = new formidable.IncomingForm()
-
+    
     form.uploadDir = folder
     form.parse(req, (_, fields, files) => {
         console.log('\n-----------')
@@ -61,21 +64,16 @@ app.get('/analyze', (req, res) => {
             console.log('Unable to scan audio directory: ' + err)
             return
         }
-
         files.forEach(file => {
             // Converting and processing file
             try {
+                console.log(file)
                 // audiobin to l16
-               
+                audio.convertToLinear16(folder + '/' + file, folder + '/' + file + '.raw')
             } catch (error) {
                 console.log(error)
-                console.log('pipa')
                 res.json(fail)
             }
-            // Removing the file, no need to keep it in the server
-            fs.unlink(path.join(folder, file), err => {
-                if (err) throw err;
-            });
         })
     })
 })
