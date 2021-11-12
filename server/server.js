@@ -43,7 +43,7 @@ app.use((req, res, next) => {
 app.post('/upload', (req, res) => {
     helpers.removeContents(folder)
     const form = new formidable.IncomingForm()
-    
+
     form.uploadDir = folder
     form.parse(req, (_, fields, files) => {
         console.log('\n-----------')
@@ -78,6 +78,8 @@ app.get('/analyze', (req, res) => {
     })
 })
 
-app.listen(port, () => {
-    console.log('\nUpload server running on http://localhost:' + port)
-})
+module.exports.startServer = function () {
+    app.listen(port, () => {
+        console.log('\nServer running on http://localhost:' + port)
+    })
+}

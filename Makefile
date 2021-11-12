@@ -5,4 +5,4 @@ dev-client:
 	quasar dev
 
 dev-server:
-	GOOGLE_APPLICATION_CREDENTIALS=bootloader/gcp.json node api/server.js
+	node bootloader/main.js
