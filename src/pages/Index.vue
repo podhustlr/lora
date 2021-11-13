@@ -14,7 +14,7 @@
     <div class="q-pa-md">
       <div class="q-gutter-sm row items-start">
         <q-uploader
-          @uploaded="this.stateAnalyzeBtn = true"
+          @uploaded="this.stateAnalyzeBtn = true;"
           accept="audio/*"
           auto-upload
           url="http://localhost:4444/upload"
@@ -25,36 +25,62 @@
     <div class="q-pa-md q-gutter-sm">
       <q-btn
         v-if="this.stateAnalyzeBtn"
-        @click="onClick"
+        @click="this.analyze"
         color="primary"
         label="analyze"
       />
+    </div>
+    <div v-if="this.stateTranscriptionContent" class="q-pa-md">
+      <q-infinite-scroll @load="onLoad" :offset="250">
+        <div v-for="(item, index) in items" :key="index" class="caption">
+          <p>{{transcription}}</p>
+        </div>
+        <template v-slot:loading>
+          <div class="row justify-center q-my-md">
+            <q-spinner-dots color="primary" size="40px" />
+          </div>
+        </template>
+      </q-infinite-scroll>
     </div>
   </q-page>
 </template>
 
 <script>
 import { api } from "boot/axios";
+import { ref } from "vue";
 
 export default {
   data() {
     return {
       stateAnalyzeBtn: false,
+      stateTranscriptionContent: false,
+      transcription: "",
     };
   },
   methods() {
-    return {};
-  },
-  setup() {
     return {
-      onClick() {
+      analyze() {
         api.get("/analyze").then((response) => {
           if (response.status == 200) {
-            console.log(response.data);
+            this.transcription = response.data.transcription;
+            this.stateTranscriptionContent = true;
+            console.log(this.transcription);
           } else {
             console.log("something went wrong");
           }
         });
+      },
+    };
+  },
+  setup() {
+    const items = ref([{}, {}, {}, {}, {}, {}, {}]);
+    return {
+      items,
+      onLoad(index, done) {
+        setTimeout(() => {
+          items.value.push({}, {}, {}, {}, {}, {}, {});
+          done();
+        }, 2000);
       },
     };
   },
