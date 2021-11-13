@@ -68,7 +68,7 @@ app.get('/analyze', (req, res) => {
         }
         const config = {
             encoding: 'MP3',
-            sampleRateHertz: 48000,
+            sampleRateHertz: 44100,
             languageCode: 'en-us',
         }
         const request = {
