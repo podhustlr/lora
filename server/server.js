@@ -29,7 +29,7 @@ app.use((req, res, next) => {
 
 app.post('/upload', (req, res) => {
     function upload() {
-        fs.readdirSync(folder, (err, files) => {
+        fs.readdir(folder, (err, files) => {
             if (err) {
                 console.log('Unable to scan audio directory: ' + err)
                 return
