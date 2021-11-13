@@ -14,9 +14,9 @@ make dependencies
 make dev-client
 ```
 
-### Start the API
+### Start the server
 ```bash
-make dev-api
+make dev-server
 ```
 
 ### Build the app for production
