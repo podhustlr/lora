@@ -1,7 +1,7 @@
 const { format } = require('util')
 const { Storage } = require('@google-cloud/storage')
 
-const audioBucket = 'fabulas-de-machina-audio-content'
+const audioBucket = process.env.AUDIO_STORAGE_BUCKET
 
 // Instantiate a storage client
 const storage = new Storage()
@@ -11,18 +11,8 @@ const bucket = storage.bucket(audioBucket)
 
 module.exports = {
     uploadBlob: function (filePath) {
-        let blob = bucket.file(filePath)
-        let blobStream = blob.createWriteStream()
-
-        blobStream.on('error', err => {
-            next(err)
+        bucket.upload(filePath, {
+            destination: 'latest.raw',
         })
-
-        blobStream.on('finish', () => {
-            // Construct gsUri that file can be accessed
-            const gsUri = format('gs://${bucket.name}/${blob.name}')
-        })
-
-        return gsUri
     }
 }

@@ -13,7 +13,7 @@
         </div>
     </div>
     <div class="q-pa-md q-gutter-sm">
-        <q-btn @click="onClick" color="primary" label="analyze" />
+        <q-btn disable @click="onClick" color="primary" label="analyze" />
     </div>
 </q-page>
 </template>
@@ -35,7 +35,7 @@ export default {
             onClick() {
                 api.get('/analyze').then(response => {
                     if (response.status == 200) {
-                        console.log('all good');
+                        console.log(response.data)
                     } else {
                         console.log('something went wrong');
                     }

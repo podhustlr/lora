@@ -1,5 +1,6 @@
 .DS_Store
 .thumbs.db
+.env
 node_modules
 api/files
 bootloader/gcp.json
