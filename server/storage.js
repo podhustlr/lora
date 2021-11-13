@@ -12,7 +12,7 @@ const bucket = storage.bucket(audioBucket)
 module.exports = {
     uploadBlob: function (filePath) {
         bucket.upload(filePath, {
-            destination: 'latest.raw',
+            destination: 'latest.mp3',
         })
     }
 }

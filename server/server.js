@@ -6,7 +6,6 @@ const
     path = require('path'),
     fs = require('fs'),
     speech = require('@google-cloud/speech'),
-    audio = require('./audio'),
     helpers = require('./helpers'),
     storage = require('./storage')
 
@@ -29,19 +28,14 @@ app.use((req, res, next) => {
 })
 
 app.post('/upload', (req, res) => {
-    function transform(file) {
-        audio.convertToLinear16(folder + '/' + file, folder + '/' + file + '.raw')
-    }
-
-    function upload(transform) {
-        fs.readdir(folder, (err, files) => {
+    function upload() {
+        fs.readdirSync(folder, (err, files) => {
             if (err) {
                 console.log('Unable to scan audio directory: ' + err)
                 return
             }
             files.forEach(file => {
-                transform(file)
-                storage.uploadBlob(folder + '/' + file + '.raw')
+                storage.uploadBlob(folder + '/' + file)
             })
         })
     }
@@ -58,7 +52,7 @@ app.post('/upload', (req, res) => {
     })
 
     // This is a bad, bad thing
-    setTimeout(() => {  upload(transform) }, 2000);
+    setTimeout(() => {  upload() }, 2000);
     res.sendStatus(200)
 })
 
@@ -67,14 +61,14 @@ app.get('/analyze', (req, res) => {
     console.log('Analyzing...')
 
     async function analyze() {
-        const gcsUri = 'gs://raw_audio_fabulasdemachina/latest.raw'
+        const gcsUri = 'gs://' + process.env.AUDIO_STORAGE_BUCKET + '/latest.mp3'
 
         const audio = {
             uri: gcsUri,
         }
         const config = {
-            encoding: 'LINEAR16',
-            sampleRateHertz: 1600,
+            encoding: 'MP3',
+            sampleRateHertz: 48000,
             languageCode: 'en-us',
         }
         const request = {
