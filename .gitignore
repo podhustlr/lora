@@ -4,6 +4,7 @@
 node_modules
 api/files
 bootloader/gcp.json
+src-ssr/
 
 # Quasar core related directories
 .quasar

@@ -1,0 +1,12 @@
+apps:
+  - script   : /ssr/index.js
+    name     : 'client'
+    instances: 4
+    exec_mode: cluster
+  - script : /bootloader/main.js
+    name   : 'server'
+    watch  : true
+    env    :
+      NODE_ENV: development
+    env_production:
+      NODE_ENV: production

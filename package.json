@@ -6,7 +6,8 @@
   "author": "Christos Alexiou <pcnoic@gmail.com>",
   "private": true,
   "scripts": {
-    "test": "echo \"No test specified\" && exit 0"
+    "test": "echo \"No test specified\" && exit 0",
+    "start": "node bootlsoader/main.js"
   },
   "dependencies": {
     "@google-cloud/speech": "^4.9.0",
