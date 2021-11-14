@@ -11,17 +11,21 @@ RUN npm ci
 # Building
 RUN quasar build -m ssr
 
-FROM node:lts-alpine3.14
+FROM node:current-slim
 
 # Copying client build artifacts
 COPY --from=build /gen/dist/ssr/ /ssr
 
-# Installing and configuring node process manager
-RUN npm install -g pm2
-RUN npm install
+WORKDIR /ssr
 
-COPY process.yml process.yml
+# Installing and configuring node process manager
+RUN npm install pm2 -g
+COPY package.json /ssr/package.json
+COPY package-lock.json /ssr/package-lock.json
+RUN npm ci
+
+COPY process.yml /ssr/process.yml
 
 EXPOSE 80
 
-CMD ["pm2-runtime", "process.yml", "--only", "client"]
+CMD ["pm2-runtime", "/ssr/process.yml", "--only", "client"]
