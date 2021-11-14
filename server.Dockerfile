@@ -14,4 +14,4 @@ COPY process.yml process.yml
 
 EXPOSE 4444
 
-CMD ["pm2-runtime", "process.yml" "--only", "server"]
+CMD ["sh", "-c", "pm2-runtime --only server"]
