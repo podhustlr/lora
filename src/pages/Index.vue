@@ -14,7 +14,7 @@
     <div class="q-pa-md">
       <div class="q-gutter-sm row items-start">
         <q-uploader
-          @uploaded="this.stateAnalyzeBtn = true;"
+          @uploaded="this.stateAnalyzeBtn = true"
           accept="audio/*"
           auto-upload
           url="http://localhost:4444/upload"
@@ -25,22 +25,19 @@
     <div class="q-pa-md q-gutter-sm">
       <q-btn
         v-if="this.stateAnalyzeBtn"
-        @click="this.analyze"
+        @click="analyze"
         color="primary"
         label="analyze"
       />
     </div>
-    <div v-if="this.stateTranscriptionContent" class="q-pa-md">
-      <q-infinite-scroll @load="onLoad" :offset="250">
-        <div v-for="(item, index) in items" :key="index" class="caption">
-          <p>{{transcription}}</p>
-        </div>
-        <template v-slot:loading>
-          <div class="row justify-center q-my-md">
-            <q-spinner-dots color="primary" size="40px" />
-          </div>
-        </template>
-      </q-infinite-scroll>
+    <q-linear-progress v-if="this.stateInderterminate" indeterminate />
+    <div class="row justify-center full-height full-width text-center" v-if="this.stateTranscriptionContent">
+      <q-card style="width=60%" class="transcription-box">
+        <q-card-section>
+          {{ transcription }}
+        </q-card-section>
+      </q-card>
+      <q-btn class="transcription-btn" @click="reloadPage" color="secondary" label="new transcription" />
     </div>
   </q-page>
 </template>
@@ -52,25 +49,29 @@ import { ref } from "vue";
 export default {
   data() {
     return {
+      stateInderterminate: false,
       stateAnalyzeBtn: false,
       stateTranscriptionContent: false,
       transcription: "",
     };
   },
-  methods() {
-    return {
-      analyze() {
-        api.get("/analyze").then((response) => {
-          if (response.status == 200) {
-            this.transcription = response.data.transcription;
-            this.stateTranscriptionContent = true;
-            console.log(this.transcription);
-          } else {
-            console.log("something went wrong");
-          }
-        });
-      },
-    };
+  methods: {
+    reloadPage() {
+        window.location.reload();
+    },
+    analyze() {
+      this.stateInderterminate = true;
+      this.stateAnalyzeBtn = false;
+      api.get("/analyze").then((response) => {
+        if (response.status == 200) {
+          this.stateInderterminate = false;
+          this.transcription = response.data.transcription;
+          this.stateTranscriptionContent = true;
+        } else {
+          console.log("something went wrong");
+        }
+      });
+    },
   },
   setup() {
     const items = ref([{}, {}, {}, {}, {}, {}, {}]);
@@ -92,7 +93,12 @@ h2 {
   margin-bottom: 5px;
 }
 
-subtitle {
-  margin-top: 0px;
+.transcription-btn {
+    margin-top: 10px;
+}
+
+.transcription-box {
+    margin-left: 10px;
+    margin-right: 10px;
 }
 </style>
