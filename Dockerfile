@@ -28,6 +28,6 @@ RUN npm ci
 
 COPY process.yml process.yml
 
-EXPOSE 3000 4444
+EXPOSE 80 4444
 
 CMD ["pm2-runtime", "process.yml"]
