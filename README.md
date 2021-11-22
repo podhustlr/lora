@@ -2,7 +2,7 @@
 <center>
   <img src="https://i.imgur.com/JqBFRKI.png" />
 </center>
-RESTful Async Transcription Service using GCP Speech-To-Text API
+RESTful Async Transcription App using GCP Speech-To-Text API
 
 ## Install the dependencies
 ```bash
